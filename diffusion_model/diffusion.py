@@ -106,7 +106,7 @@ class UNET_AttentionBlock(nn.Module):
 
         x = self.layernorm_2(x)
         
-        x, gate = self.inear_geglu_1(x).chunk(2, dim=-1)
+        x, gate = self.linear_geglu_1(x).chunk(2, dim=-1)
 
         x = x * F.gelu(gate)
 
@@ -118,7 +118,7 @@ class UNET_AttentionBlock(nn.Module):
 
         x = x.view((n, c, h, w))
 
-        return self.conv_ouput(x) + residue_long
+        return self.conv_output(x) + residue_long
 
 class Upsample(nn.Module):
 
@@ -186,7 +186,7 @@ class UNET(nn.Module):
 
             SwitchSequential(UNET_ResidualBlock(2560, 1280)),
 
-            SwitchSequential(UNET_ResidualBlock(2560, 1280), upsample(1280)),
+            SwitchSequential(UNET_ResidualBlock(2560, 1280), Upsample(1280)),
 
             SwitchSequential(UNET_ResidualBlock(2560, 1280), UNET_AttentionBlock(8, 160)),
 
