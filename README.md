@@ -1,5 +1,7 @@
 # Stable Diffusion Model from Scratch
 
+![image](https://github.com/user-attachments/assets/548ecf20-97a8-49e9-a363-9880b7c4e448)
+
 ## Overview
 
 This project implements a Stable Diffusion model from scratch using PyTorch. The model is capable of generating images from textual descriptions (text-to-image) and transforming existing images based on textual prompts (image-to-image). The implementation is based on the foundational principles of diffusion models and includes features like classifier-free guidance and latent space representations.
