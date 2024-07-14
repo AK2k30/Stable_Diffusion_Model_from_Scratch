@@ -1,13 +1,34 @@
 import torch
 import numpy as np
 from tqdm import tqdm
-from ddpm import DDPMSampler
+from ddpm import DDPMSampler # type: ignore
 
 WIDTH = 512
 HEIGHT = 512
 LATENTS_WIDTH = WIDTH // 8
 LATENTS_HEIGHT = HEIGHT // 8
 
+"""
+Generate an image using a diffusion model.
+
+Args:
+    prompt (str): The text prompt to use for image generation.
+    uncond_prompt (str): The unconditional text prompt to use for image generation.
+    input_image (PIL.Image.Image, optional): An input image to use as a starting point for the diffusion process.
+    strength (float, optional): The strength of the input image, between 0 and 1. A value of 0 means the output image will be completely generated from the prompt, while a value of 1 means the output image will be a blend of the input image and the generated image.
+    do_cfg (bool, optional): Whether to use conditional guidance during the diffusion process.
+    cfg_scale (float, optional): The scale factor for conditional guidance.
+    sampler_name (str, optional): The name of the diffusion sampler to use, currently only "ddpm" is supported.
+    n_inference_steps (int, optional): The number of inference steps to perform during the diffusion process.
+    models (dict, optional): A dictionary of pre-loaded models to use for the diffusion process.
+    seed (int, optional): A seed value to use for the random number generator.
+    device (torch.device, optional): The device to use for the diffusion process.
+    idle_device (torch.device, optional): A device to use for idle operations.
+    tokenizer (transformers.PreTrainedTokenizer, optional): A tokenizer to use for encoding the text prompts.
+
+Returns:
+    PIL.Image.Image: The generated image.
+"""
 def generate(prompt= str, uncond_prompt= str, input_image=None, strength=0.8, do_cfg=True, cfg_scale=7.5, sampler_name="ddpm", n_inference_steps=50, models={}, seed=None, device=None, idle_device=None, tokenizer=None):
 
     with torch.no_grad():
@@ -107,6 +128,18 @@ def generate(prompt= str, uncond_prompt= str, input_image=None, strength=0.8, do
         images = images.to("cpu", torch.uint8).numpy()
         return images[0]
 
+"""
+Rescales a tensor `x` from an old range to a new range, optionally clamping the values to the new range.
+
+Args:
+    x (torch.Tensor): The input tensor to be rescaled.
+    old_range (tuple[float, float]): The minimum and maximum values of the old range.
+    new_range (tuple[float, float]): The minimum and maximum values of the new range.
+    clamp (bool, optional): If True, the rescaled values will be clamped to the new range. Defaults to False.
+
+Returns:
+    torch.Tensor: The rescaled tensor.
+"""
 def rescale(x, old_range, new_range, clamp=False):
     old_min, old_max = old_range
     new_min, new_max = new_range
@@ -117,6 +150,15 @@ def rescale(x, old_range, new_range, clamp=False):
         x = x.clamp(new_min, new_max)
     return x
 
+"""
+Computes a time embedding for a given timestep.
+
+Args:
+    timestep (torch.Tensor): A tensor of timesteps, with shape (batch_size,).
+
+Returns:
+    torch.Tensor: A tensor of time embeddings, with shape (batch_size, 160).
+"""
 def get_time_embedding(timestep):
     freqs = torch.pow(10000, -torch.arange(start=0, end=160, dtype=torch.float32) / 160) 
     x = torch.tensor([timestep], dtype=torch.float32)[:, None] * freqs[None]

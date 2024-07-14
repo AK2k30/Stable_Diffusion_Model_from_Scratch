@@ -3,6 +3,13 @@ from torch import nn
 from torch.nn import functional as F
 from attention import SelfAttention
 
+"""
+The VAE_AttentionBlock class is a PyTorch module that applies self-attention to the input tensor. It is used as part of the decoder in a variational autoencoder (VAE) model.
+
+The module consists of a GroupNorm layer, a SelfAttention layer, and a residual connection. The input tensor is first reshaped and transposed, then passed through the SelfAttention layer. The output is then transposed and reshaped back to the original shape, and added to the original input via the residual connection.
+
+This attention block is designed to capture long-range dependencies in the input data, which can be useful for tasks such as image generation or sequence modeling.
+"""
 class VAE_AttentionBlock(nn.Module):
 
     def __init__(self, channels: int):
@@ -30,6 +37,13 @@ class VAE_AttentionBlock(nn.Module):
 
         return x
 
+"""
+    The VAE_ResidualBlock class is a PyTorch module that applies a residual connection to a sequence of convolutional and normalization layers. It is used as part of the decoder in a variational autoencoder (VAE) model.
+    
+    The module consists of two GroupNorm layers, two convolutional layers, and a residual connection. The input tensor is first passed through the first GroupNorm and convolutional layer, then the second GroupNorm and convolutional layer. The output is then added to the original input via the residual connection.
+    
+    This residual block is designed to help the model learn more complex representations by allowing the gradients to flow more easily through the network during training.
+"""
 class VAE_ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__() 
@@ -58,6 +72,19 @@ class VAE_ResidualBlock(nn.Module):
 
         return x + self.residual_layer(residue)
 
+"""
+    The VAE_Decoder class is a PyTorch module that implements the decoder component of a Variational Autoencoder (VAE) model. The decoder takes a latent representation as input and generates an output image.
+    
+    The decoder consists of a series of convolutional, upsampling, and residual blocks that progressively increase the spatial resolution and refine the output image. The key components of the decoder are:
+    
+    - An initial 1x1 convolution to adjust the number of channels.
+    - A series of VAE_ResidualBlock layers that apply residual connections to help the model learn complex representations.
+    - A VAE_AttentionBlock layer that applies self-attention to the feature maps.
+    - Upsampling layers to increase the spatial resolution of the output.
+    - A final convolutional layer to produce the output image.
+    
+    The forward method of the VAE_Decoder class applies the sequence of layers to the input tensor and returns the generated output image.
+"""
 class VAE_Decoder(nn.Sequential):
     def __init__(self):
         super().__init__(

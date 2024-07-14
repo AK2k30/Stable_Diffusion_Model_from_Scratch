@@ -3,6 +3,13 @@ from torch import nn
 from torch.nn import functional as F
 import math
 
+"""
+Implements a self-attention mechanism, where the query, key, and value tensors are all derived from the same input tensor.
+
+This module takes an input tensor `x` and computes the self-attention output. It first projects the input tensor into query, key, and value tensors using linear layers. Then, it computes the attention weights by taking the dot product of the query and key tensors, scales the weights by the square root of the head dimension, and applies a softmax. Finally, it computes the output by taking the weighted sum of the value tensor.
+
+The attention mechanism supports both regular attention and causal (masked) attention, where future positions are masked out to prevent information leakage.
+"""
 class SelfAttention(nn.Module):
 
     def __init__(self, n_heads: int, d_embed: int, in_proj_bias=True, out_proj_bias=True):
@@ -44,6 +51,13 @@ class SelfAttention(nn.Module):
 
         return output
 
+"""
+    Implements a cross-attention mechanism, where the query tensor is derived from one input tensor (x) and the key and value tensors are derived from another input tensor (y).
+    
+    This module takes two input tensors `x` and `y` and computes the cross-attention output. It first projects the input tensors `x` and `y` into query, key, and value tensors using linear layers. Then, it computes the attention weights by taking the dot product of the query and key tensors, scales the weights by the square root of the head dimension, and applies a softmax. Finally, it computes the output by taking the weighted sum of the value tensor.
+    
+    The attention mechanism supports both regular attention and causal (masked) attention, where future positions are masked out to prevent information leakage.
+"""
 class CrossAttention(nn.Module):
     def __init__(self, n_heads: int, d_embed: int, d_cross: int, in_proj_bias=True, out_proj_bias=True):
         super().__init__()

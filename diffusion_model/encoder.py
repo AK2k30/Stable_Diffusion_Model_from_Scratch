@@ -1,3 +1,8 @@
+"""
+The VAE_Encoder class is a PyTorch module that serves as the encoder component of a Variational Autoencoder (VAE) model. It takes an input tensor of shape (batch_size, 3, height, width) and applies a series of convolutional, residual, and attention blocks to produce a latent representation of the input.
+
+The forward method of the VAE_Encoder class takes an input tensor `x` and a noise tensor `noise`, and returns the latent representation of the input. The latent representation is obtained by passing the input through the various layers of the encoder, and then splitting the output into the mean and log-variance of the latent distribution. The final output is obtained by sampling from this latent distribution using the reparameterization trick.
+"""
 import torch
 from torch import nn
 from torch.nn import functional as F

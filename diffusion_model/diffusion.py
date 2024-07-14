@@ -1,3 +1,12 @@
+"""
+The `UNET` class is the main module of the diffusion model, which is a type of generative model used for image generation and other tasks. The `UNET` class consists of an encoder, a bottleneck, and a decoder, each of which is composed of various sub-modules such as `UNET_ResidualBlock` and `UNET_AttentionBlock`.
+
+The `TimeEmbedding` class is used to create a time-dependent embedding, which is used as input to the `UNET_ResidualBlock` and `UNET_AttentionBlock` modules.
+
+The `UNET_OutputLayer` class is the final layer of the diffusion model, which takes the output of the `UNET` module and produces the final output of the model.
+
+The `Diffusion` class is the top-level module that combines the `TimeEmbedding`, `UNET`, and `UNET_OutputLayer` modules to create the complete diffusion model.
+"""
 import torch
 from torch import nn
 from torch.nn import functional as F
