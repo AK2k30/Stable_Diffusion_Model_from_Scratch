@@ -5,9 +5,9 @@ from attention import SelfAttention
 
 """
     Implements a cross-attention mechanism, where the query tensor is derived from one input tensor (x) and the key and value tensors are derived from another input tensor (y).
-    
+
     This module takes two input tensors `x` and `y` and computes the cross-attention output. It first projects the input tensors `x` and `y` into query, key, and value tensors using linear layers. Then, it computes the attention weights by taking the dot product of the query and key tensors, scales the weights by the square root of the head dimension, and applies a softmax. Finally, it computes the output by taking the weighted sum of the value tensor.
-    
+
     The attention mechanism supports both regular attention and causal (masked) attention, where future positions are masked out to prevent information leakage.
 """ 
 class CLIPEmbedding(nn.Module):
