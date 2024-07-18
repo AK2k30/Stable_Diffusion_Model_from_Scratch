@@ -29,7 +29,9 @@ Args:
 Returns:
     PIL.Image.Image: The generated image.
 """
-def generate(prompt= str, uncond_prompt= str, input_image=None, strength=0.8, do_cfg=True, cfg_scale=7.5, sampler_name="ddpm", n_inference_steps=50, models={}, seed=None, device=None, idle_device=None, tokenizer=None):
+def generate(prompt= str, uncond_prompt= str, input_image=None, strength=0.8, do_cfg=True, cfg_scale=7.5, sampler_name="ddpm", n_inference_steps=50, models=None, seed=None, device=None, idle_device=None, tokenizer=None):
+    if models is None:
+        models = {}
 
     with torch.no_grad():
         if not(0 < strength <= 1):
