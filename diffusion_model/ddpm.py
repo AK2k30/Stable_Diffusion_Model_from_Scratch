@@ -40,7 +40,7 @@ class DDPMSampler:
     def _get_previous_timestep(self, timestep: int) -> int:
         prev_t = timestep - self.num_train_timesteps // self.num_inference_steps
         return prev_t
-    
+
     def _get_variance(self, timestep: int) -> torch.Tensor:
         prev_t = self._get_previous_timestep(timestep)
 
@@ -57,7 +57,7 @@ class DDPMSampler:
         variance = torch.clamp(variance, min=1e-20)
 
         return variance
-    
+
     def set_strength(self, strength=1):
         """
             Set how much noise to add to the input image. 
@@ -101,13 +101,13 @@ class DDPMSampler:
             noise = torch.randn(model_output.shape, generator=self.generator, device=device, dtype=model_output.dtype)
             # Compute the variance as per formula (7) from https://arxiv.org/pdf/2006.11239.pdf
             variance = (self._get_variance(t) ** 0.5) * noise
-        
+
         # sample from N(mu, sigma) = X can be obtained by X = mu + sigma * N(0, 1)
         # the variable "variance" is already multiplied by the noise N(0, 1)
         pred_prev_sample = pred_prev_sample + variance
 
         return pred_prev_sample
-    
+
     def add_noise(
         self,
         original_samples: torch.FloatTensor,

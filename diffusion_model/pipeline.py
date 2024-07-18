@@ -44,7 +44,7 @@ def generate(prompt= str, uncond_prompt= str, input_image=None, strength=0.8, do
             generate.seed()
         else:
            generator.manual_seed(seed) 
-        
+
         clip = models["clip"]
         clip.to(device)
 

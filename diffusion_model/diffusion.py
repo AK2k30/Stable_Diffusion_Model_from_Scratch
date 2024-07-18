@@ -13,7 +13,7 @@ from torch.nn import functional as F
 from attention import SelfAttention, CrossAttention
 
 class TimeEmbedding(nn.Module):
-    
+
     def __init__(self, n_embd: int):
         super().__init__()
         self.linear_1 = nn.Linear(n_embd, 4 * n_embd)
@@ -43,7 +43,7 @@ class UNET_ResidualBlock(nn.Module):
             self.residual_layer = nn.Identify()
         else:
             self.residual_layer = nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0)
-         
+
     def forward(self, feature, time):
 
         residue = feature
@@ -114,7 +114,7 @@ class UNET_AttentionBlock(nn.Module):
         residue_short = x
 
         x = self.layernorm_2(x)
-        
+
         x, gate = self.linear_geglu_1(x).chunk(2, dim=-1)
 
         x = x * F.gelu(gate)
